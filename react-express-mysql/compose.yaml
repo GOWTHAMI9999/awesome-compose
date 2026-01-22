@@ -13,17 +13,23 @@ services:
     ports:
       - "5000:5000"
     environment:
-      MONGO_URL: mongodb://mongo:27017/appdb
+      DB_HOST: mysql
+      DB_USER: root
+      DB_PASSWORD: rootpassword
+      DB_NAME: appdb
     depends_on:
-      - mongo
+      - mysql
 
-  mongo:
-    image: mongo:4.4
+  mysql:
+    image: mysql:8
     restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: appdb
     volumes:
-      - mongo_data:/data/db
+      - mysql_data:/var/lib/mysql
     ports:
-      - "27017:27017"
+      - "3306:3306"
 
 volumes:
-  mongo_data:
+  mysql_data:
