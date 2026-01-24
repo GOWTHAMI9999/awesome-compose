@@ -1,0 +1,60 @@
+- name: Deploy React app with Nginx
+  hosts: app
+  become: yes
+
+  vars:
+    app_dir: /var/www/app
+    react_dir: /var/www/app/react-nginx
+    nginx_html: /var/www/html
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install required packages
+      apt:
+        name:
+          - nodejs
+          - npm
+          - nginx
+          - git
+        state: present
+
+    - name: Ensure app directory exists
+      file:
+        path: "{{ app_dir }}"
+        state: directory
+        mode: "0755"
+
+    - name: Clone application repository
+      git:
+        repo: https://github.com/GOWTHAMI9999/awesome-compose.git
+        dest: "{{ app_dir }}"
+        force: yes
+
+    - name: Install frontend dependencies
+      npm:
+        path: "{{ react_dir }}"
+
+    - name: Build frontend
+      command: npm run build
+      args:
+        chdir: "{{ react_dir }}"
+
+    - name: Remove default nginx html
+      file:
+        path: "{{ nginx_html }}"
+        state: absent
+
+    - name: Copy build to nginx
+      copy:
+        src: "{{ react_dir }}/build"
+        dest: "{{ nginx_html }}"
+        remote_src: yes
+
+    - name: Restart nginx
+      service:
+        name: nginx
+        state: restarted
+        enabled: yes
