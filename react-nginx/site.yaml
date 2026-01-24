@@ -1,5 +1,5 @@
 - name: Deploy React app with Nginx
-  hosts: app
+  hosts: managed_node
   become: yes
 
   vars:
@@ -58,3 +58,4 @@
         name: nginx
         state: restarted
         enabled: yes
+
