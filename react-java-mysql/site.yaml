@@ -19,8 +19,8 @@
 
     - name: Install nodejs (npm included)
       apt:
-      name: nodejs
-      state: present
+        name: nodejs
+        state: present
 
     - name: Copy frontend code to server
       copy:
