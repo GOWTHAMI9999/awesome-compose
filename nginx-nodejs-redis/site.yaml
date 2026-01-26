@@ -41,10 +41,12 @@
 
 
     - name: Install backend dependencies
-      become: false
-      shell: npm install --omit=dev
+      become: true
+      become_user: ubuntu
+      command: npm install --omit=dev
       args:
         chdir: /home/ubuntu/awesome-compose/nginx-nodejs-redis/web
+
 
 
 
