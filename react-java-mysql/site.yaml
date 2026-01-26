@@ -1,6 +1,6 @@
 ---
 - name: Deploy React Frontend using NGINX
-  hosts: frontend
+  hosts: managed_node
   become: yes
 
   vars:
