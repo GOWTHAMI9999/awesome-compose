@@ -41,9 +41,11 @@
 
 
     - name: Install backend dependencies
+      become_user: ubuntu
       shell: |
         cd {{ web_dir }}
         npm install --omit=dev
+
 
 
 
@@ -53,16 +55,21 @@
         global: yes
 
     - name: Start application with pm2
-      command: pm2 start server.js --name {{ pm2_app_name }}
-      args:
-        chdir: "{{ web_dir }}"
+      become_user: ubuntu
+      shell: |
+        cd {{ web_dir }}
+        pm2 start server.js --name web-app
       ignore_errors: yes
 
+
     - name: Save pm2 process list
+      become_user: ubuntu
       command: pm2 save
 
+
     - name: Enable pm2 startup on reboot
-      command: pm2 startup systemd -u {{ ansible_user_id }} --hp /home/{{ ansible_user_id }}
+      command: pm2 startup systemd -u ubuntu --hp /home/ubuntu
+
 
     - name: Remove default nginx site
       file:
