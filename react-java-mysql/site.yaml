@@ -14,15 +14,13 @@
       apt:
         update_cache: yes
 
-    - name: Install Node.js
-      apt:
-        name: nodejs
-        state: present
+    - name: Add NodeSource repository
+      shell: curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
 
-    - name: Install npm
+    - name: Install nodejs (npm included)
       apt:
-        name: npm
-        state: present
+      name: nodejs
+      state: present
 
     - name: Copy frontend code to server
       copy:
