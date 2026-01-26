@@ -32,11 +32,13 @@
       args:
         creates: /usr/bin/node
 
-    - name: Clone application repository
+    - name: Update application repository
       git:
         repo: https://github.com/GOWTHAMI9999/awesome-compose.git
         dest: "{{ repo_root }}"
+        update: yes
         force: yes
+
 
     - name: Install backend dependencies
       npm:
