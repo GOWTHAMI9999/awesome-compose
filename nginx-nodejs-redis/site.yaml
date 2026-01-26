@@ -4,7 +4,7 @@
 
   vars:
     app_root: /var/www/app
-    app_dir: /var/www/app/nginx-nodejs-redis/web
+    app_dir: /home/ubuntu/awesome-compose/nginx-nodejs-redis
     node_version: "18.x"
     app_port: 5000
     pm2_app_name: express-app
@@ -53,11 +53,13 @@
         name: pm2
         global: yes
 
+   
     - name: Start application with pm2
-      command: pm2 start server.js --name {{ pm2_app_name }}
+      command: pm2 start server.js --name web-app
       args:
-        chdir: "{{ app_dir }}"
+      chdir: "{{ app_dir }}/web"
       ignore_errors: yes
+
 
     - name: Save pm2 process list
       command: pm2 save
