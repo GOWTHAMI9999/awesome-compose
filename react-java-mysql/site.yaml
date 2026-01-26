@@ -1,0 +1,60 @@
+---
+- name: Deploy React Frontend using NGINX
+  hosts: frontend
+  become: yes
+
+  vars:
+    app_dir: /opt/frontend
+    build_dir: /opt/frontend/build
+    nginx_root: /var/www/html
+
+  tasks:
+
+    - name:  Update apt
+      apt:
+        update_cache: yes
+
+    - name: Install Node.js
+      apt:
+        name: nodejs
+        state: present
+
+    - name: Install npm
+      apt:
+        name: npm
+        state: present
+
+    - name: Copy frontend code to server
+      copy:
+        src: frontend/
+        dest: "{{ app_dir }}"
+
+    - name: Install npm dependencies
+      command: npm install
+      args:
+        chdir: "{{ app_dir }}"
+
+    - name: Build React app
+      command: npm run build
+      args:
+        chdir: "{{ app_dir }}"
+
+    - name: Install nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Remove default nginx html
+      file:
+        path: "{{ nginx_root }}"
+        state: absent
+
+    - name:  Copy build files to nginx
+      copy:
+        src: "{{ build_dir }}/"
+        dest: "{{ nginx_root }}"
+
+    - name: Restart nginx
+      service:
+        name: nginx
+        state: restarted
