@@ -41,9 +41,10 @@
 
 
     - name: Install backend dependencies
-      command: npm install --omit=dev
-      args:
-        chdir: "{{ web_dir }}"
+      shell: |
+        cd {{ web_dir }}
+        npm install --omit=dev
+
 
 
     - name: Install pm2 globally
