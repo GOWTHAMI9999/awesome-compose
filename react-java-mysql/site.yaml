@@ -1,4 +1,3 @@
----
 - name: Deploy React Frontend using NGINX
   hosts: managed_node
   become: yes
@@ -10,21 +9,26 @@
 
   tasks:
 
-    - name:  Update apt
+    - name: Update apt
       apt:
         update_cache: yes
 
     - name: Add NodeSource repository
       shell: curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
 
-    - name: Install nodejs (npm included)
+    - name: Install nodejs
       apt:
         name: nodejs
         state: present
 
-    - name: Copy frontend code to server
+    - name: Create app directory
+      file:
+        path: "{{ app_dir }}"
+        state: directory
+
+    - name: Copy frontend code
       copy:
-        src: frontend/
+        src: ./frontend/
         dest: "{{ app_dir }}"
 
     - name: Install npm dependencies
@@ -47,12 +51,12 @@
         path: "{{ nginx_root }}"
         state: absent
 
-    - name:  Copy build files to nginx
+    - name: Copy build to nginx
       copy:
         src: "{{ build_dir }}/"
         dest: "{{ nginx_root }}"
         remote_src: yes
-        
+
     - name: Restart nginx
       service:
         name: nginx
