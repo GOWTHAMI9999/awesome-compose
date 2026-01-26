@@ -53,19 +53,18 @@
         name: pm2
         global: yes
 
-   
     - name: Start application with pm2
       command: pm2 start server.js --name web-app
       args:
-      chdir: "{{ app_dir }}/web"
+        chdir: "{{ app_dir }}/web"
       ignore_errors: yes
-
 
     - name: Save pm2 process list
       command: pm2 save
 
     - name: Enable pm2 startup on reboot
       command: pm2 startup systemd -u {{ ansible_user_id }} --hp /home/{{ ansible_user_id }}
+
 
 
     # - name: Create nginx reverse proxy config
