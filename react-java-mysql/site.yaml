@@ -51,7 +51,8 @@
       copy:
         src: "{{ build_dir }}/"
         dest: "{{ nginx_root }}"
-
+        remote_src: yes
+        
     - name: Restart nginx
       service:
         name: nginx
