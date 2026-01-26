@@ -57,4 +57,16 @@
     - name: Save pm2 process list
       command: pm2 save
 
-    - name: Enable pm2
+    - name: Enable pm2 startup on reboot
+      command: pm2 startup systemd -u {{ ansible_user_id }} --hp /home/{{ ansible_user_id }}
+
+    - name: Remove default nginx site
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+
+    - name: Restart nginx
+      service:
+        name: nginx
+        state: restarted
+        enabled: yes
