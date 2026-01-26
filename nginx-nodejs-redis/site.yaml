@@ -4,7 +4,7 @@
 
   vars:
     app_root: /var/www/app
-    app_dir: /var/www/app/nginx-nodejs-redis
+    app_dir: /var/www/app/nginx-nodejs-redis/web
     node_version: "18.x"
     app_port: 5000
     pm2_app_name: express-app
